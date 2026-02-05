@@ -1,449 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemical Expression Diagram</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<title>Forgive Me</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #0f0f14;
+        overflow: hidden;
+        transition: background 1.5s ease;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
+    /* ===== HEART ===== */
+    .heart {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        background: #ff2f6d;
+        transform: rotate(-45deg);
+        animation: beat 1.2s infinite;
+        box-shadow: 0 0 40px rgba(255,47,109,0.6);
+    }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+    .heart::before,
+    .heart::after {
+        content: '';
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        background: #ff2f6d;
+        border-radius: 50%;
+    }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+    .heart::before {
+        top: -80px;
+        left: 0;
+    }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+    .heart::after {
+        left: 80px;
+        top: 0;
+    }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 40px;
-        }
+    .heart-text {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: rotate(45deg);
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px;
+    }
 
-        .input-section {
-            display: flex;
-            flex-direction: column;
-        }
+    @keyframes beat {
+        0%, 100% { transform: rotate(-45deg) scale(1); }
+        50% { transform: rotate(-45deg) scale(1.15); }
+    }
 
-        .input-section h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
+    /* ===== SECOND SCENE ===== */
+    .scene2 {
+        display: none;
+        position: absolute;
+        inset: 0;
+        background: white;
+        overflow: hidden;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .falling-heart {
+        position: absolute;
+        color: #ff2f6d;
+        font-size: 24px;
+        animation: fall linear forwards;
+        opacity: 0.8;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
+    @keyframes fall {
+        from {
+            transform: translateY(-50px);
+            opacity: 1;
         }
-
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
+        to {
+            transform: translateY(110vh);
+            opacity: 0;
         }
+    }
 
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+    /* ===== TYPEWRITER ===== */
+    .message {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+        font-size: 22px;
+        color: #333;
+        padding: 0 20px;
+        line-height: 1.8;
+    }
 
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
+    .cursor {
+        display: inline-block;
+        width: 2px;
+        height: 24px;
+        background: #333;
+        animation: blink 0.8s infinite;
+    }
 
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        button {
-            flex: 1;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-generate {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-clear {
-            background: #f0f0f0;
-            color: #333;
-            border: 2px solid #e0e0e0;
-        }
-
-        .btn-clear:hover {
-            background: #e0e0e0;
-        }
-
-        .diagram-section {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .diagram-section h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .canvas-container {
-            background: #f9f9f9;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 20px;
-            min-height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        canvas {
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .info-section {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #e0e0e0;
-        }
-
-        .info-box {
-            background: #f0f7ff;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .info-box h3 {
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-
-        .info-box p {
-            color: #555;
-            line-height: 1.6;
-        }
-
-        .equation-display {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-family: 'Courier New', monospace;
-            color: #333;
-            font-size: 1.1rem;
-        }
-
-        .molecule-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .molecule-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>⚗️ Chemical Expression Diagram</h1>
-            <p>this site is made by yusef mohey for his wife dr:jana walid ❤️</p>
-            <p>Visualize chemical reactions and molecular structures</p>
-        </div>
 
-        <div class="main-content">
-            <div class="input-section">
-                <h2>Input</h2>
-                
-                <div class="form-group">
-                    <label for="equation">Chemical Equation</label>
-                    <textarea id="equation" placeholder="e.g., H2 + O2 → H2O&#10;or: 2H2 + O2 → 2H2O"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="moleculeName">Molecule Name</label>
-                    <input type="text" id="moleculeName" placeholder="e.g., Water, Methane, Ethanol">
-                </div>
-
-                <div class="form-group">
-                    <label for="formulaInput">Molecular Formula</label>
-                    <input type="text" id="formulaInput" placeholder="e.g., H2O, CH4, C2H5OH">
-                </div>
-
-                <div class="button-group">
-                    <button class="btn-generate" onclick="generateDiagram()">Generate Diagram</button>
-                    <button class="btn-clear" onclick="clearInputs()">Clear</button>
-                </div>
-                <div class="info-section">
-                    <div class="info-box">
-                        <h3>📝 Format Guide</h3>
-                        <p>Enter chemical equations with reactants on the left and products on the right, separated by →</p>
-                    </div>
-                    <div class="info-box">
-                        <h3>💡 Examples</h3>
-                        <p>Combustion: CH4 + 2O2 → CO2 + 2H2O<br>
-                        Photosynthesis: 6CO2 + 6H2O → C6H12O6 + 6O2</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="diagram-section">
-                <h2>Diagram</h2>
-                
-                <div class="canvas-container">
-                    <canvas id="diagramCanvas" width="500" height="300"></canvas>
-                </div>
-
-                <div id="equationDisplay" class="equation-display" style="display: none;">
-                    <strong>Equation:</strong> <span id="equationText"></span>
-                </div>
-
-                <div id="moleculePreview" class="molecule-preview" style="display: none;"></div>
-            </div>
-        </div>
+<div class="heart" id="heart">
+    <div class="heart-text">
+        plz , forgive me
     </div>
+</div>
 
-    <script>
-        const canvas = document.getElementById('diagramCanvas');
-        const ctx = canvas.getContext('2d');
+<div class="scene2" id="scene2">
+    <div class="message">
+        <span id="text"></span><span class="cursor"></span>
+    </div>
+</div>
 
-        function parseEquation(equation) {
-            const [reactants, products] = equation.split('→').map(e => e.trim());
-            
-            const parseChemical = (str) => {
-                const chemicals = str.split('+').map(e => e.trim());
-                return chemicals.map(chem => {
-                    const match = chem.match(/^(\d*)(.+)$/);
-                    const coefficient = match[1] ? parseInt(match[1]) : 1;
-                    const formula = match[2];
-                    return { coefficient, formula };
-                });
-            };
+<script>
+    const heart = document.getElementById("heart");
+    const scene2 = document.getElementById("scene2");
 
-            return {
-                reactants: parseChemical(reactants),
-                products: parseChemical(products)
-            };
+    setTimeout(() => {
+        heart.style.opacity = "0";
+        heart.style.transform = "scale(0)";
+    }, 3500);
+
+    setTimeout(() => {
+        document.body.style.background = "white";
+        scene2.style.display = "block";
+        startHearts();
+        typeText();
+    }, 4500);
+
+    /* Falling hearts */
+    function startHearts() {
+        setInterval(() => {
+            const h = document.createElement("div");
+            h.className = "falling-heart";
+            h.innerHTML = "❤";
+            h.style.left = Math.random() * 100 + "vw";
+            h.style.animationDuration = (3 + Math.random() * 3) + "s";
+            scene2.appendChild(h);
+
+            setTimeout(() => h.remove(), 6000);
+        }, 200);
+    }
+
+    /* Typewriter */
+    const msg = "انا والله ما كان قصدي الكلام دا كله يا نن عنيا، ممكن تسامحيني؟ بجد… انا اسف من قلبي 🤍";
+    let i = 0;
+    const textEl = document.getElementById("text");
+
+    function typeText() {
+        if (i < msg.length) {
+            textEl.innerHTML += msg.charAt(i);
+            i++;
+            setTimeout(typeText, 70);
         }
+    }
+</script>
 
-        function drawArrow(fromX, fromY, toX, toY) {
-            const headlen = 15;
-            const angle = Math.atan2(toY - fromY, toX - fromX);
-
-            ctx.strokeStyle = '#667eea';
-            ctx.fillStyle = '#667eea';
-            ctx.lineWidth = 3;
-
-            ctx.beginPath();
-            ctx.moveTo(fromX, fromY);
-            ctx.lineTo(toX, toY);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.moveTo(toX, toY);
-            ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
-            ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
-            ctx.closePath();
-            ctx.fill();
-        }
-
-        function drawMolecule(x, y, formula, coefficient = 1) {
-            ctx.fillStyle = '#333';
-            ctx.font = 'bold 16px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            const text = (coefficient > 1 ? coefficient : '') + formula;
-            ctx.fillText(text, x, y);
-        }
-
-        function generateDiagram() {
-            const equation = document.getElementById('equation').value.trim();
-            const moleculeName = document.getElementById('moleculeName').value.trim();
-            const formula = document.getElementById('formulaInput').value.trim();
-
-            if (!equation && !formula) {
-                alert('Please enter either a chemical equation or a molecular formula');
-                return;
-            }
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            if (equation) {
-                try {
-                    const parsed = parseEquation(equation);
-
-                    const reactantStartX = 50;
-                    const productStartX = 300;
-                    const yPos = canvas.height / 2;
-
-                    let currentY = yPos - (parsed.reactants.length - 1) * 30;
-                    parsed.reactants.forEach(reactant => {
-                        drawMolecule(reactantStartX, currentY, reactant.formula, reactant.coefficient);
-                        currentY += 60;
-                    });
-
-                    currentY = yPos - (parsed.products.length - 1) * 30;
-                    parsed.products.forEach(product => {
-                        drawMolecule(productStartX, currentY, product.formula, product.coefficient);
-                        currentY += 60;
-                    });
-
-                    drawArrow(150, yPos, 250, yPos);
-
-                    document.getElementById('equationText').textContent = equation;
-                    document.getElementById('equationDisplay').style.display = 'block';
-                } catch (error) {
-                    alert('Invalid equation format. Please use: Reactants → Products');
-                }
-            }
-
-            if (formula) {
-                const x = canvas.width / 2;
-                const y = canvas.height / 2;
-
-                ctx.fillStyle = '#764ba2';
-                ctx.font = 'bold 24px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(formula, x, y - 30);
-
-                if (moleculeName) {
-                    ctx.fillStyle = '#667eea';
-                    ctx.font = '14px Arial';
-                    ctx.fillText(moleculeName, x, y + 20);
-                }
-
-                drawMoleculePreview(formula);
-            }
-        }
-
-        function drawMoleculePreview(formula) {
-            const preview = document.getElementById('moleculePreview');
-            preview.innerHTML = '';
-
-            const elements = formula.match(/[A-Z][a-z]?[0-9]*/g) || [];
-            const molecule = {};
-
-            elements.forEach(el => {
-                const match = el.match(/([A-Z][a-z]?)([0-9]*)/);
-                const symbol = match[1];
-                const count = match[2] ? parseInt(match[2]) : 1;
-                molecule[symbol] = (molecule[symbol] || 0) + count;
-            });
-
-            Object.entries(molecule).forEach(([element, count]) => {
-                const item = document.createElement('div');
-                item.className = 'molecule-item';
-                item.textContent = `${element}${count > 1 ? count : ''}`;
-                preview.appendChild(item);
-            });
-
-            preview.style.display = 'grid';
-        }
-
-        function clearInputs() {
-            document.getElementById('equation').value = '';
-            document.getElementById('moleculeName').value = '';
-            document.getElementById('formulaInput').value = '';
-            document.getElementById('equationDisplay').style.display = 'none';
-            document.getElementById('moleculePreview').innerHTML = '';
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function drawWelcomeDiagram() {
-            ctx.fillStyle = '#ccc';
-            ctx.font = '18px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('Enter a chemical equation or formula', canvas.width / 2, canvas.height / 2 - 20);
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#999';
-            ctx.fillText('to see the diagram here', canvas.width / 2, canvas.height / 2 + 20);
-        }
-
-        drawWelcomeDiagram();
-    </script>
 </body>
 </html>
