@@ -1,135 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Forgive Me</title>
+<title>From My Heart</title>
+
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', sans-serif;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
 
-    body {
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #0f0f14;
-        overflow: hidden;
-        transition: background 1.5s ease;
-    }
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#1a1a2e,#0f0f14);
+    overflow:hidden;
+    transition:background 2s ease;
+}
 
-    /* ===== HEART ===== */
-    .heart {
-        position: relative;
-        width: 160px;
-        height: 160px;
-        background: #ff2f6d;
-        transform: rotate(-45deg);
-        animation: beat 1.2s infinite;
-        box-shadow: 0 0 40px rgba(255,47,109,0.6);
-    }
+/* ================= HEART ================= */
+.heart-wrap{
+    position:relative;
+    animation:fadeIn 2s ease forwards;
+}
 
-    .heart::before,
-    .heart::after {
-        content: '';
-        position: absolute;
-        width: 160px;
-        height: 160px;
-        background: #ff2f6d;
-        border-radius: 50%;
-    }
+.heart{
+    position:relative;
+    width:170px;
+    height:170px;
+    background:linear-gradient(135deg,#ff4f8b,#ff1f6d);
+    transform:rotate(-45deg);
+    animation:beat 1.2s infinite;
+    box-shadow:0 0 60px rgba(255,47,109,.7);
+}
 
-    .heart::before {
-        top: -80px;
-        left: 0;
-    }
+.heart::before,
+.heart::after{
+    content:'';
+    position:absolute;
+    width:170px;
+    height:170px;
+    background:linear-gradient(135deg,#ff4f8b,#ff1f6d);
+    border-radius:50%;
+}
 
-    .heart::after {
-        left: 80px;
-        top: 0;
-    }
+.heart::before{ top:-85px; left:0; }
+.heart::after{ left:85px; top:0; }
 
-    .heart-text {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transform: rotate(45deg);
-        color: white;
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-        padding: 20px;
-    }
+.heart-text{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transform:rotate(45deg);
+    color:white;
+    font-size:21px;
+    font-weight:600;
+    text-align:center;
+    padding:20px;
+}
 
-    @keyframes beat {
-        0%, 100% { transform: rotate(-45deg) scale(1); }
-        50% { transform: rotate(-45deg) scale(1.15); }
-    }
+/* Sparkles */
+.sparkle{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:white;
+    border-radius:50%;
+    opacity:0;
+    animation:sparkle 2s infinite;
+}
 
-    /* ===== SECOND SCENE ===== */
-    .scene2 {
-        display: none;
-        position: absolute;
-        inset: 0;
-        background: white;
-        overflow: hidden;
-    }
+@keyframes sparkle{
+    0%{opacity:0;transform:scale(0);}
+    50%{opacity:1;}
+    100%{opacity:0;transform:scale(1.5);}
+}
 
-    .falling-heart {
-        position: absolute;
-        color: #ff2f6d;
-        font-size: 24px;
-        animation: fall linear forwards;
-        opacity: 0.8;
-    }
+@keyframes beat{
+    0%,100%{transform:rotate(-45deg) scale(1);}
+    50%{transform:rotate(-45deg) scale(1.15);}
+}
 
-    @keyframes fall {
-        from {
-            transform: translateY(-50px);
-            opacity: 1;
-        }
-        to {
-            transform: translateY(110vh);
-            opacity: 0;
-        }
-    }
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(.8);}
+    to{opacity:1;transform:scale(1);}
+}
 
-    /* ===== TYPEWRITER ===== */
-    .message {
-        position: absolute;
-        top: 40%;
-        width: 100%;
-        text-align: center;
-        font-size: 22px;
-        color: #333;
-        padding: 0 20px;
-        line-height: 1.8;
-    }
+/* ================= SCENE 2 ================= */
+.scene2{
+    position:absolute;
+    inset:0;
+    background:white;
+    display:none;
+    overflow:hidden;
+}
 
-    .cursor {
-        display: inline-block;
-        width: 2px;
-        height: 24px;
-        background: #333;
-        animation: blink 0.8s infinite;
-    }
+.falling-heart{
+    position:absolute;
+    font-size:20px;
+    color:#ff4f8b;
+    animation:fall linear forwards;
+    opacity:.8;
+}
 
-    @keyframes blink {
-        50% { opacity: 0; }
-    }
+@keyframes fall{
+    from{transform:translateY(-50px) scale(.8);opacity:1;}
+    to{transform:translateY(110vh) scale(1.2);opacity:0;}
+}
+
+/* ================= TEXT ================= */
+.message{
+    position:absolute;
+    top:38%;
+    width:100%;
+    text-align:center;
+    font-size:22px;
+    color:#333;
+    line-height:1.9;
+    padding:0 25px;
+}
+
+.cursor{
+    display:inline-block;
+    width:2px;
+    height:24px;
+    background:#333;
+    animation:blink .8s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
 </style>
 </head>
+
 <body>
 
-<div class="heart" id="heart">
-    <div class="heart-text">
-       <p> plz , forgive me</p>
+<div class="heart-wrap" id="heartWrap">
+    <div class="heart">
+        <div class="heart-text">
+            plz , forgive me
+        </div>
     </div>
 </div>
 
@@ -140,48 +157,57 @@
 </div>
 
 <script>
-    const heart = document.getElementById("heart");
-    const scene2 = document.getElementById("scene2");
+/* Sparkles */
+const heartWrap=document.getElementById("heartWrap");
+for(let i=0;i<8;i++){
+    const s=document.createElement("div");
+    s.className="sparkle";
+    s.style.left=Math.random()*180+"px";
+    s.style.top=Math.random()*180+"px";
+    s.style.animationDelay=Math.random()*2+"s";
+    heartWrap.appendChild(s);
+}
 
-    setTimeout(() => {
-        heart.style.opacity = "0";
-        heart.style.transform = "scale(0)";
-    }, 3500);
+/* Transition */
+setTimeout(()=>{
+    heartWrap.style.opacity="0";
+    heartWrap.style.transform="scale(1.4)";
+},4000);
 
-    setTimeout(() => {
-        document.body.style.background = "white";
-        scene2.style.display = "block";
-        startHearts();
-        typeText();
-    }, 4500);
+setTimeout(()=>{
+    document.body.style.background="white";
+    heartWrap.style.display="none";
+    scene2.style.display="block";
+    startHearts();
+    typeText();
+},5500);
 
-    /* Falling hearts */
-    function startHearts() {
-        setInterval(() => {
-            const h = document.createElement("div");
-            h.className = "falling-heart";
-            h.innerHTML = "❤";
-            h.style.left = Math.random() * 100 + "vw";
-            h.style.animationDuration = (3 + Math.random() * 3) + "s";
-            scene2.appendChild(h);
+/* Falling hearts */
+function startHearts(){
+    setInterval(()=>{
+        const h=document.createElement("div");
+        h.className="falling-heart";
+        h.innerHTML=Math.random()>0.5?"❤":"💗";
+        h.style.left=Math.random()*100+"vw";
+        h.style.fontSize=(14+Math.random()*20)+"px";
+        h.style.animationDuration=(3+Math.random()*3)+"s";
+        scene2.appendChild(h);
+        setTimeout(()=>h.remove(),6000);
+    },180);
+}
 
-            setTimeout(() => h.remove(), 6000);
-        }, 200);
+/* Typewriter */
+const msg="انا والله ما كان قصدي الكلام دا كله يا نن عنيا…\nممكن تسامحيني؟\nانا اسف، ومن قلبي 🤍";
+let i=0;
+const textEl=document.getElementById("text");
+
+function typeText(){
+    if(i<msg.length){
+        textEl.innerHTML+=msg.charAt(i)==="\n"?"<br>":msg.charAt(i);
+        i++;
+        setTimeout(typeText,80);
     }
-
-    /* Typewriter */
-    const msg = "  انا والله ما كان قصدي الكلام دا كله يا نن عنيا، ممكن تسامحيني؟ بجد… انا اسف من قلبي 🤍 وبكره هشرحك رياضه وفيزياء وابعتهوملك بس مش تزعلي مني يا توتي ممكن ";
-
-    let i = 0;
-    const textEl = document.getElementById("text");
-
-    function typeText() {
-        if (i < msg.length) {
-            textEl.innerHTML += msg.charAt(i);
-            i++;
-            setTimeout(typeText, 70);
-        }
-    }
+}
 </script>
 
 </body>
